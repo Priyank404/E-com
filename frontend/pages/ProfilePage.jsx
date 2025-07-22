@@ -31,8 +31,8 @@ const ProfilePage = () => {
             className="w-28 h-28 rounded-full object-cover shadow"
           />
           <div className="text-center sm:text-left">
-            <h2 className="text-2xl font-semibold">Priyank Sharma</h2>
-            <p className="text-gray-500">priyanksharma@example.com</p>
+            <h2 className="text-2xl font-semibold">Priyank Khambhati</h2>
+            <p className="text-gray-500">priyank@example.com</p>
 
             {/* Mobile Number Section */}
             {editing ? (
