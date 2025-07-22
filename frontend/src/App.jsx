@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
+import ProfilePage from '../pages/ProfilePage';
 import ShopPage from '../pages/ShopPage';
 import Cart from '../pages/Cart';
 import AdminPanel from '../pages/AdminPanel';
@@ -13,7 +14,7 @@ function App() {
       <Routes>
         {/* Public Route */}
         <Route path="/" element={<HomePage />} />
-
+        <Route path="/profile" element={<ProfilePage />} />
         {/* Protected Routes */}
         <Route
           path="/shop"
