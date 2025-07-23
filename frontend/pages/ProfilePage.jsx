@@ -1,9 +1,27 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 import NavBar from '../components/NavBar';
+import { UserContext } from '../context/UserContext';
+
 
 const ProfilePage = () => {
+
+  const {User} = useContext(UserContext);
+
+
   const [mobile, setMobile] = useState('');
   const [editing, setEditing] = useState(true); // Start in editing mode (no mobile yet)
+
+
+  
+
+  const handleChnagePhoto = (id)=>{
+      try {
+        const res = axios.get(`http://localhost:3000//${id}/profile/picture`);
+      } catch (error) {
+        return error
+      }
+  }
 
   const handleMobileSave = () => {
     if (!/^\d{10}$/.test(mobile)) {
@@ -31,8 +49,8 @@ const ProfilePage = () => {
             className="w-28 h-28 rounded-full object-cover shadow"
           />
           <div className="text-center sm:text-left">
-            <h2 className="text-2xl font-semibold">Priyank Khambhati</h2>
-            <p className="text-gray-500">priyank@example.com</p>
+            <h2 className="text-2xl font-semibold">{User.fullname}</h2>
+            <p className="text-gray-500">{User.email}</p>
 
             {/* Mobile Number Section */}
             {editing ? (
@@ -63,7 +81,9 @@ const ProfilePage = () => {
               </div>
             )}
 
-            <button className="mt-3 px-4 py-1 border border-gray-300 rounded-md hover:bg-gray-100 text-sm">
+            <button 
+            className="mt-3 px-4 py-1 border border-gray-300 rounded-md hover:bg-gray-100 text-sm"
+            onClick={handleChnagePhoto}>
               Change Photo
             </button>
           </div>

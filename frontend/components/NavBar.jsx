@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const NavBar = ({isShop=false,isCart=false,isAdmin=false , isProfile=false}) => {
   return (
@@ -7,7 +8,8 @@ const NavBar = ({isShop=false,isCart=false,isAdmin=false , isProfile=false}) => 
             <div className='text-3xl font-semibold tracking-tighter'>{(isShop && "Shop.")||(isCart && "Cart.")||(isAdmin && "Admin Panel.")||(isProfile && "Profile.")}</div>
             <div className=' font-semibold flex justify-between items-center gap-7'>
                 <div className='flex  gap-3'>
-                    <a href="#">Home</a>
+                    <Link to='/shop'>Home</Link>
+                    <Link to='/profile'>Profile</Link>
                 </div>
 
                 <div className='flex  gap-3'>
