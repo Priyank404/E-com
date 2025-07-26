@@ -18,6 +18,7 @@ const Cards = ({size='default',isCart=false, isAdmin=false , product}) => {
 
     const handleCart = async (id)=>{
         try {
+
             const res = await axios.post(`http://localhost:3000/products/cart/${id}`,null,  {
                 withCredentials: true // required to send the cookie
               });
@@ -48,6 +49,7 @@ const Cards = ({size='default',isCart=false, isAdmin=false , product}) => {
 
     const increase = (perv) => {
         setQuantity(prev => prev + 1)
+        
     }
     const decrease = (prev) => {
         setQuantity(prev => prev > 0? prev - 1 : 0)
@@ -63,19 +65,19 @@ const Cards = ({size='default',isCart=false, isAdmin=false , product}) => {
     // for scrolling vertically when user scrolls horizontally. You can use the following code as a starting point:
 
   return (
-   <>
+   <> 
         <div className={`${cardSize} shadow-md rounded-md overflow-hidden flex flex-col `}>
                     {/* Product Image */}
-            <div className={`flex-1 h-[75%] bg-blue-200 flex p-4 items-center justify-center`}>
-                <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover overflow-hidden rounded-md  " />
+            <div className={`flex-1 h-[75%] flex p-4 items-center justify-center`} style={{ backgroundColor: product.bgColor }}>
+                <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover  rounded-md  " />
             </div>
 
                 {/* Panel below image */}
             {isCart && (
-                <div className={`bg-${product.panelColor} px-3 flex flex-col gap-3 h-[25%] justify-center`}>
+                <div className={`px-3 flex flex-col gap-3 h-[25%] justify-center`} style={{ backgroundColor: product.panelColor }}>
                     {/* Name and Quantity Control */}
                     <div className="flex items-center justify-between">
-                        <span className={`text-lg font-medium text-${product.textColor}`}>{product.name}</span>
+                        <span className={`text-lg font-medium `} style={{ color: product.textColor }}>{product.name}</span>
                         
                         <div className="flex items-center justify-between gap-1">
                             <button
@@ -100,7 +102,7 @@ const Cards = ({size='default',isCart=false, isAdmin=false , product}) => {
                 </div>
             )||(
 
-            <div className="bg-blue-100 px-2 py-2 flex items-center justify-between gap-2">
+            <div className=" px-2 py-2 flex items-center justify-between gap-2" style={{ backgroundColor: product.panelColor }}>
                     {/* Name & Price vertically stacked */}
                 <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-800">{product.name}</span>
@@ -116,15 +118,12 @@ const Cards = ({size='default',isCart=false, isAdmin=false , product}) => {
                         <FaMinus />                
                     </button>
                 )||
-                <button
-                    onClick={()=>handleCart(product._id)}
-                    className=" rounded-full w-6 h-6 flex items-center justify-center text-xl font-bold text-gray-700"
-                    >
-                        <FaPlus />                
+                    <button
+                        onClick={()=>handleCart(product._id)}
+                        className=" rounded-full w-6 h-6 flex items-center justify-center text-xl font-bold text-gray-700"
+                        >
+                            <FaPlus />                
                     </button>}
-                
-                    
-                
             </div>          
             )}
         </div>  

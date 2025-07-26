@@ -10,6 +10,7 @@ const MainRight = ({ isAdmin = false, reloadTrigger }) => {
 
    useEffect(() => {
     fetchProducts();
+
   }, [reloadTrigger, fetchProducts]);
 
   const scrollContainerRef = useRef();

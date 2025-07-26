@@ -9,12 +9,8 @@ const NavBar = ({isShop=false,isCart=false,isAdmin=false , isProfile=false}) => 
             <div className=' font-semibold flex justify-between items-center gap-7'>
                 <div className='flex  gap-3'>
                     <Link to='/shop'>Home</Link>
-                    <Link to='/profile'>Profile</Link>
-                </div>
-
-                <div className='flex  gap-3'>
-                    {!isCart && <a href="#">Cart</a>}
-                    {!isProfile && <a href="#">Account</a>}
+                    {!isProfile && <Link to='/profile'>Profile</Link>}
+                    {!isCart &&  <Link to='/cart'>Cart</Link>}
                 </div>
             </div>
         </div>

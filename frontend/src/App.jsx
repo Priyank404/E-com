@@ -23,7 +23,6 @@ function App() {
             ...res.data.user,
             role: res.data.role
           });
-          console.log(setUser);
         }
       } catch (error) {
       console.log(error)
@@ -38,7 +37,6 @@ function App() {
       <Routes>
         {/* Public Route */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
         {/* Protected Routes */}
         <Route
           path="/shop"

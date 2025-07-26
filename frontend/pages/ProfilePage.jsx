@@ -1,38 +1,112 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
 import { UserContext } from '../context/UserContext';
+import FlashMessage from '../components/FlashMessage';
 
 
 const ProfilePage = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [flashMessage, setFlashMessage] = useState(null);
+    const fileInputRef = React.useRef();
+    const {User} = useContext(UserContext);
+    const [mobile, setMobile] = useState('');
+    const [editing, setEditing] = useState(true);
 
-  const {User} = useContext(UserContext);
-
-
-  const [mobile, setMobile] = useState('');
-  const [editing, setEditing] = useState(true); // Start in editing mode (no mobile yet)
-
+  useEffect(() => {
+      if (location.state?.message) {
+        setFlashMessage(location.state.message);
+  
+        // 👇 Clear the state after using it
+        // This replaces the current history entry without the message
+        navigate(location.pathname, { replace: true });
+      }
+    }, [location, navigate]);
 
   
 
-  const handleChnagePhoto = (id)=>{
-      try {
-        const res = axios.get(`http://localhost:3000//${id}/profile/picture`);
-      } catch (error) {
-        return error
-      }
+  useEffect(() => {
+  if (User) {
+    if (User.contactNumber) {
+      setMobile(User.contactNumber);
+      setEditing(false); // Show display mode if contact exists
+    } else {
+      setEditing(true);  // Show input if no contact exists
+    }
   }
+}, [User]);
 
-  const handleMobileSave = () => {
+  const [profileImage, setProfileImage] = useState(null);
+
+// Set from user if already has one
+useEffect(() => {
+  if (User?.profilePicture) {
+    setProfileImage(User.profilePicture); // assuming it's a URL or base64
+  }
+}, [User]);
+
+
+const handleLogOut = async () => {
+  try {
+    const res = await axios.post('http://localhost:3000/users/logout', {}, {
+      withCredentials: true 
+    });
+    navigate('/');
+  } catch (err) {
+    console.log('Logout failed', err);
+  }
+};
+
+
+const handleChangePhoto = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('profilePicture', file);
+
+  try {
+    const res = await axios.patch(
+      `http://localhost:3000/users/${User._id}/profile-picture`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      },
+    );
+    navigate('/profile', { state: { message: "Profile Picture updated successfully!" } });
+    setProfileImage(res.data.user.profilePicture);
+  } catch (error) {
+    console.error('Upload failed:', error);
+  }
+};
+
+
+  const handleMobileSave = async() => {
     if (!/^\d{10}$/.test(mobile)) {
       alert('Please enter a valid 10-digit mobile number');
       return;
+    }
+    console.log(User._id)
+    try {
+      const response = await axios.patch(`http://localhost:3000/users/${User._id}`, { contactNumber: mobile });
+        navigate('/profile', { state: { message: "Mobile Number updated successfully!" } });
+    } catch (error) {
+      console.log(error)
+      
     }
     // Call backend here if needed
     setEditing(false);
   };
 
+
   return (
+    <div className="relative">
+    <FlashMessage message={flashMessage} />
     <div className="h-full w-full">
       {/* Navbar */}
       <div className="h-[10vh] border-b border-black">
@@ -44,10 +118,11 @@ const ProfilePage = () => {
         {/* Profile Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-10">
           <img
-            src="/profile.jpg"
+            src={`http://localhost:3000${User.profilePicture}`}
             alt="Profile"
             className="w-28 h-28 rounded-full object-cover shadow"
           />
+
           <div className="text-center sm:text-left">
             <h2 className="text-2xl font-semibold">{User.fullname}</h2>
             <p className="text-gray-500">{User.email}</p>
@@ -82,10 +157,17 @@ const ProfilePage = () => {
             )}
 
             <button 
-            className="mt-3 px-4 py-1 border border-gray-300 rounded-md hover:bg-gray-100 text-sm"
-            onClick={handleChnagePhoto}>
+              className="mt-3 px-4 py-1 border border-gray-300 rounded-md hover:bg-gray-100 text-sm"
+              onClick={() => fileInputRef.current.click()}>
               Change Photo
             </button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleChangePhoto}
+              style={{ display: 'none' }}
+            />
           </div>
         </div>
 
@@ -139,12 +221,15 @@ const ProfilePage = () => {
             <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100">
               Change Password
             </button>
-            <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+            <button 
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+            onClick={handleLogOut}>
               Logout
             </button>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

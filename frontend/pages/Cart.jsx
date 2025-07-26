@@ -7,6 +7,20 @@ import { CartContext } from '../context/CartContext'
 
 const Cart = ({ isCart = false }) => {
 
+  const calculateTotal = (product) => {
+  if (!product) return 0;
+
+  const price = product.price || 0;
+  const discount = product.discountedPrice || 0;
+  const platformFee = 0;
+  const shippingFee = 0;
+
+  const finalPrice = price - discount;
+
+  return finalPrice + platformFee + shippingFee;
+};
+
+
   const {fetchCart, cartItems} = useContext(CartContext);
 
   useEffect(() => {
@@ -42,17 +56,17 @@ const Cart = ({ isCart = false }) => {
 
                   <div className='flex justify-between flex-row w-1/3'>
                     <span>Total MRP</span>
-                    <span>₹1920</span>
+                    <span>₹{product.price}</span>
                   </div>
 
                   <div className='flex justify-between flex-row w-1/3'>
                     <span>Discount on MRP</span>
-                    <span>₹0</span>
+                    <span>₹{product.discountedPrice || 0}</span>
                   </div>
 
                   <div className='flex justify-between flex-row w-1/3'>
                     <span>Platform Fee</span>
-                    <span>₹20</span>
+                    <span>₹0</span>
                   </div>
 
                   <div className='flex justify-between flex-row w-1/3'>
@@ -66,7 +80,7 @@ const Cart = ({ isCart = false }) => {
                   {/* Total and Button */}
                   <div className='flex justify-between items-center w-1/3'>
                     <span className='text-lg font-medium'>Total Amount</span>
-                    <span className='text-green-500 text-lg font-bold'>₹1940</span>
+                    <span className='text-green-500 text-lg font-bold'>₹{calculateTotal(product)}</span>
                   </div>
 
                   <button className='mt-6 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 w-1/3'>
