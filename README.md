@@ -20,7 +20,7 @@ A full-stack E-commerce web application built with the **MERN** stack (MongoDB, 
 - 📦 RESTful API integration
 - 🔐 Secure password handling with bcrypt
 - 🌐 Protected routes using JWT
-- 💳 Payment gateway integration will be added soon.
+- 💳 Payment gateway.
 
  
 
