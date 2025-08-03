@@ -4,8 +4,14 @@ import Cards from '../components/Cards'
 import { useLocation } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
 import { CartContext } from '../context/CartContext'
+import { UserContext } from '../context/UserContext'
+import PaymentButton from '../components/PaymentButton'
 
 const Cart = ({ isCart = false }) => {
+
+  const { User } = useContext(UserContext);
+
+
 
   const calculateTotal = (product) => {
   if (!product) return 0;
@@ -83,9 +89,7 @@ const Cart = ({ isCart = false }) => {
                     <span className='text-green-500 text-lg font-bold'>₹{calculateTotal(product)}</span>
                   </div>
 
-                  <button className='mt-6 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 w-1/3'>
-                    Place Order
-                  </button>
+                  <PaymentButton user={User} />
                 </div>
               </div>
             </div>
