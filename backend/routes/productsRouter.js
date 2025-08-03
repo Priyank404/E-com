@@ -16,7 +16,7 @@ router.post('/create', upload.single('image'), async (req, res, next) => {
     bgColor,
     panelColor,
     textColor,
-    image: req.file.buffer
+    image: req.file.path
   })
   res.json({ success: true, message: 'Product created successfully!' });
 })
@@ -41,7 +41,7 @@ router.post('/cart/:id', isLoggedin, async (req, res) => {
 
     const selectedProduct = {
         ...product._doc,
-        imageUrl: `data:image/jpeg;base64,${Buffer.from(product.image).toString('base64')}`
+        imageUrl: `${process.env.BASE_URL || 'http://localhost:3000'}/${product.image.replace(/\\/g, '/')}`
     }
 
     req.user.cart = [selectedProduct]; // only one product allowed in cart

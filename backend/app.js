@@ -15,6 +15,7 @@ const usersRouter = require('./routes/usersRouters')
 const productsRouter = require('./routes/productsRouter');
 const shop = require('./routes/shop');
 const checkAuth = require('./routes/checkAuth');
+const paymentRoutes = require('./routes/orderRoute');
 
 
 app.use(cors({
@@ -32,6 +33,8 @@ app.use(expressSession({
 }))
 app.use(flash())
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 
 
@@ -40,6 +43,8 @@ app.use('/users', usersRouter)
 app.use('/products', productsRouter)
 app.use('/shop',shop)
 app.use('/check', checkAuth)
+app.use('/api/payment', paymentRoutes);
+
 
 
 

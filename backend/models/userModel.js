@@ -10,7 +10,7 @@ const userModel = mongoose.Schema({
     password: String,
     address: String,
     contactNumber: String,
-    profilePic: String,
+    profilePicture: String,
     cart:{
         type: Array,
         default:[]
